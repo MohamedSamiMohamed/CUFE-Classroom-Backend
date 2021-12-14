@@ -5,13 +5,13 @@ const { JoiPasswordComplexity } = require('joi-password')
 require('dotenv').config()
 const Joi = require('joi');
 
+const options = { discriminatorKey: 'userType' };
 let userSchema = new mongoose.Schema({
     userName: {
         type: String,
         required: true,
         unique: true,
         trim: true,
-        validate: [validator.isEmail, 'Please enter a valid email']
     },
     email: {
         type: String,
@@ -23,7 +23,7 @@ let userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 9,
+        minlength: 8,
         maxlength: 1024
     },
     firstName: {
@@ -46,7 +46,8 @@ let userSchema = new mongoose.Schema({
     confirmationToken: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        default: ""
     },
     type: {
         type: String,
@@ -61,19 +62,33 @@ let userSchema = new mongoose.Schema({
         required: true
     }
 
-})
+}, options)
+
+
+// initial implementation of learner and instrcuctor schemas, this will be changed later
+let learnerSchema = new mongoose.Schema({
+    courses: [String],
+    grade: Number
+}, options)
+
+let instructorSchema = new mongoose.Schema({
+    courses: [String]
+}, options)
 
 userSchema.methods.generateAuthToken = function () {
     return jwt.sign({ _id: this._id, role: this.type, email: this.email }, process.env.JWT_PRIVATE_KEY);
 }
 
-studentSchema.methods.generateConfirmationToken = function () {
+userSchema.methods.generateConfirmationToken = function () {
     return jwt.sign({ email: this.email }, process.env.CONFIRMATION_TOKEN_PRIVATE_KEY, { expiresIn: '3d' });
 }
 
 
 
 const User = mongoose.model('user', userSchema);
+const Learner = User.discriminator("learner", learnerSchema)
+const Instructor = User.discriminator("instructor", instructorSchema)
+
 
 function validateUser(user) {
     const schema = Joi.object({
@@ -102,12 +117,15 @@ function validateUser(user) {
             .equal(Joi.ref('password'))
             .messages({ 'any.only': 'confirmed password does not match password' }),
         type: Joi.string().valid("admin", "learner", "instructor").required(),
-        birthDate: Joi.date().max('01-01-2004').iso().messages({'date.format': `Date format is YYYY-MM-DD`,'date.max':`Age must be +17`}).required(),
+        birthDate: Joi.date().max('01-01-2004').iso().messages({ 'date.format': `Date format is YYYY-MM-DD`, 'date.max': `Age must be +17` }).required(),
 
     });
     return schema.validate(user)
 }
 
+
 exports.validateUser = validateUser
 exports.User = User
+exports.Learner = Learner
+exports.Instructor = Instructor
 
