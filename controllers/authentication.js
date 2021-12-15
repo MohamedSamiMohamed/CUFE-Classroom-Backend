@@ -1,4 +1,4 @@
-const { User } = require("../models/user")
+const { User, Instructor } = require("../models/user")
 const _ = require('lodash');
 const passwordHashing = require("../utils/passwordHashing");
 const { setEmailOptions, sendConfirmationEmail } = require("../utils/email");
@@ -9,7 +9,12 @@ const bcrypt = require('bcrypt');
 exports.signup = async (req, res) => {
     let user = await User.findOne({ $or: [{ email: req.body.email }, { userName: req.body.userName }] })
     if (user) return res.status(400).send("This email or username has registered before")
-    user = new User(_.pick(req.body, ['userName', 'email', 'firstName', 'lastName', 'type', 'birthDate']))
+    if (req.body.type === "instructor") {
+        user = new Instructor(_.pick(req.body, ['userName', 'email', 'firstName', 'lastName', 'type', 'birthDate']))
+    }
+    else {
+        user = new User(_.pick(req.body, ['userName', 'email', 'firstName', 'lastName', 'type', 'birthDate']))
+    }
     user.password = await passwordHashing(req.body.password)
     user.confirmationToken = user.generateConfirmationToken()
     setEmailOptions(user)

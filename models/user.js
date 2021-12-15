@@ -65,14 +65,13 @@ let userSchema = new mongoose.Schema({
 }, options)
 
 
-// initial implementation of learner and instrcuctor schemas, this will be changed later
-let learnerSchema = new mongoose.Schema({
-    courses: [String],
-    grade: Number
-}, options)
-
 let instructorSchema = new mongoose.Schema({
-    courses: [String]
+    courses: {
+        type : [mongoose.Schema.Types.ObjectId],
+        ref : 'course',
+        required : true,
+        default : []
+    }
 }, options)
 
 userSchema.methods.generateAuthToken = function () {
@@ -86,7 +85,6 @@ userSchema.methods.generateConfirmationToken = function () {
 
 
 const User = mongoose.model('user', userSchema);
-const Learner = User.discriminator("learner", learnerSchema)
 const Instructor = User.discriminator("instructor", instructorSchema)
 
 
@@ -126,6 +124,5 @@ function validateUser(user) {
 
 exports.validateUser = validateUser
 exports.User = User
-exports.Learner = Learner
 exports.Instructor = Instructor
 
