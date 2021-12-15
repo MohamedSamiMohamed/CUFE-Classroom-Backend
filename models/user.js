@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose')
+const validator = require('validator')
+const jwt = require('jsonwebtoken')
 const { JoiPasswordComplexity } = require('joi-password')
 require('dotenv').config()
-const Joi = require('joi');
+const Joi = require('joi')
 
 const options = { discriminatorKey: 'userType' };
 let userSchema = new mongoose.Schema({
@@ -65,14 +65,13 @@ let userSchema = new mongoose.Schema({
 }, options)
 
 
-// initial implementation of learner and instrcuctor schemas, this will be changed later
-let learnerSchema = new mongoose.Schema({
-    courses: [String],
-    grade: Number
-}, options)
-
 let instructorSchema = new mongoose.Schema({
-    courses: [String]
+    courses: {
+        type : [mongoose.Schema.Types.ObjectId],
+        ref : 'course',
+        required : true,
+        default : []
+    }
 }, options)
 
 userSchema.methods.generateAuthToken = function () {
@@ -80,13 +79,12 @@ userSchema.methods.generateAuthToken = function () {
 }
 
 userSchema.methods.generateConfirmationToken = function () {
-    return jwt.sign({ email: this.email }, process.env.CONFIRMATION_TOKEN_PRIVATE_KEY, { expiresIn: '3d' });
+    return jwt.sign({ _id: this._id, email: this.email }, process.env.CONFIRMATION_TOKEN_PRIVATE_KEY, { expiresIn: '3d' });
 }
 
 
 
 const User = mongoose.model('user', userSchema);
-const Learner = User.discriminator("learner", learnerSchema)
 const Instructor = User.discriminator("instructor", instructorSchema)
 
 
@@ -105,7 +103,7 @@ function validateUser(user) {
             .required()
             .min(3)
             .max(15),
-        // abcdeF91 is correct 
+        // // abcdeF91 is correct 
         password: JoiPasswordComplexity.string()
             .min(8)
             .minOfLowercase(1)
@@ -118,7 +116,7 @@ function validateUser(user) {
             .messages({ 'any.only': 'confirmed password does not match password' }),
         type: Joi.string().valid("admin", "learner", "instructor").required(),
         birthDate: Joi.date().max('01-01-2004').iso().messages({ 'date.format': `Date format is YYYY-MM-DD`, 'date.max': `Age must be +17` }).required(),
-
+        userName: Joi.string().min(5).max(20).required(),
     });
     return schema.validate(user)
 }
@@ -126,6 +124,5 @@ function validateUser(user) {
 
 exports.validateUser = validateUser
 exports.User = User
-exports.Learner = Learner
 exports.Instructor = Instructor
 
