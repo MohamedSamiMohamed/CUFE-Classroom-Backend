@@ -4,30 +4,58 @@ require('dotenv').config()
 const Joi = require('joi');
 
 let courseSchema = new mongoose.Schema({
-    name: {
-        type : String,
-        required : true,
+    code: {
+        type: String,
+        required: true,
+        unique: true,
         min : 4,
-        max : 10,
+        max : 10
+    },
+    name: {
+        type: String,
+        required: true,
+        min: 4,
+        max: 20,
     },
     instructor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
         required: true
     },
-    learners: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
-        required: true,
-        default: []
-    },
     qa: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'qa',
         required: false,
-        unique : true
+        unique: true
+    },
+    about: {
+        type: String,
+        required : true,
+        min : 20,
+    },
+    syllabus : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'syllabus',
+        required: false,
+        unique: true
+    },
+    weeks : {
+        type : [mongoose.Schema.Types.ObjectId],
+        ref : 'courseWeek',
+        required: true,
+        unique: true,
+        default : []
+    },
+    weeksNum : {
+        type : Number,
+        min : 4,
+        max : 24,
+        required : true,
+        default : 4
     }
 })
+
+
 
 
 
@@ -37,33 +65,15 @@ const Course = mongoose.model('course', courseSchema);
 
 function validateCourse(course) {
     const schema = Joi.object({
-        email: Joi.string()
-            .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-            .required(),
-        firstName: Joi.string()
-            .alphanum()
-            .required()
-            .min(3)
-            .max(15),
-        lastName: Joi.string()
-            .alphanum()
-            .required()
-            .min(3)
-            .max(15),
-        // abcdeF91 is correct 
-        password: JoiPasswordComplexity.string()
-            .min(8)
-            .minOfLowercase(1)
-            .minOfUppercase(1)
-            .minOfNumeric(1)
-            .required(),
-        confirmPassword: Joi.string()
-            .required()
-            .equal(Joi.ref('password'))
-            .messages({ 'any.only': 'confirmed password does not match password' }),
-        type: Joi.string().valid("admin", "learner", "instructor").required(),
-        birthDate: Joi.date().max('01-01-2004').iso().messages({ 'date.format': `Date format is YYYY-MM-DD`, 'date.max': `Age must be +17` }).required(),
-
+        code : Joi.string().alphanum().min(4).max(10).required(),
+        name : Joi.string().min(4).max(20).required(),
+        aboud : Joi.string().min(20).required().message({
+            'string.empty': `"about" cannot be an empty field`,
+        }),
+        weeks : Joi.number().min(4).max(24).required()
     });
     return schema.validate(course)
 }
+
+exports.Course = Course
+exports.validateCourse = validateCourse
