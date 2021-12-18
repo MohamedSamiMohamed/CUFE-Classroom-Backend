@@ -26,7 +26,6 @@ let courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'qa',
         required: false,
-        unique: true
     },
     about: {
         type: String,
@@ -37,21 +36,17 @@ let courseSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'syllabus',
         required: false,
-        unique: true
     },
     weeks : {
         type : [mongoose.Schema.Types.ObjectId],
         ref : 'courseWeek',
         required: true,
-        unique: true,
         default : []
     },
     weeksNum : {
         type : Number,
-        min : 4,
-        max : 24,
         required : true,
-        default : 4
+        default : 0
     }
 })
 
@@ -67,10 +62,7 @@ function validateCourse(course) {
     const schema = Joi.object({
         code : Joi.string().alphanum().min(4).max(10).required(),
         name : Joi.string().min(4).max(20).required(),
-        aboud : Joi.string().min(20).required().message({
-            'string.empty': `"about" cannot be an empty field`,
-        }),
-        weeks : Joi.number().min(4).max(24).required()
+        about : Joi.string().min(20).required(),
     });
     return schema.validate(course)
 }
