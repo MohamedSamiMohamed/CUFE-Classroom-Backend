@@ -31,6 +31,9 @@ let threadSchema = new mongoose.Schema({
         required: true
     },
     question: questionSchema,
+},{
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true } 
 })
 
 threadSchema.virtual('answers', {

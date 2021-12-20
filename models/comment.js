@@ -33,7 +33,6 @@ function validateComment(comment) {
             .required()
             .min(3)
             .max(30),
-        date: Joi.date().iso().messages({ 'date.format': `Date format is YYYY-MM-DD` }).required(),
         text: Joi.string().min(1).required()
     });
     return schema.validate(comment)
