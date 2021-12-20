@@ -4,11 +4,9 @@ const _ = require('lodash');
 const { Course } = require('../models/course');
 const Fawn = require("fawn")
 require("dotenv")
-Fawn.init(process.env.FAWN_MONGODB_CONNECTION_STRING, "TempForFawn")
 
 
 exports.addSyllabus = async (req, res) => {
-    console.log(req.params.id)
     let course = await Course.findOne({ _id: req.params.id })
     if (!course) return res.status(404).send("No course found with this id")
     if (course.syllabus != null) return res.status(400).send("This course already has a syllabus")
