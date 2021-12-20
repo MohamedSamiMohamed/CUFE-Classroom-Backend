@@ -75,7 +75,7 @@ let instructorSchema = new mongoose.Schema({
 }, options)
 
 userSchema.methods.generateAuthToken = function () {
-    return jwt.sign({ _id: this._id, role: this.type, email: this.email }, process.env.JWT_PRIVATE_KEY);
+    return jwt.sign({ _id: this._id, role: this.type, email: this.email,userName : this.userName }, process.env.JWT_PRIVATE_KEY);
 }
 
 userSchema.methods.generateConfirmationToken = function () {
@@ -116,7 +116,7 @@ function validateUser(user) {
             .messages({ 'any.only': 'confirmed password does not match password' }),
         type: Joi.string().valid("admin", "learner", "instructor").required(),
         birthDate: Joi.date().max('01-01-2004').iso().messages({ 'date.format': `Date format is YYYY-MM-DD`, 'date.max': `Age must be +17` }).required(),
-        userName: Joi.string().min(5).max(20).required(),
+        userName: Joi.string().min(5).max(40).required(),
     });
     return schema.validate(user)
 }
