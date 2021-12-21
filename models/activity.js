@@ -7,7 +7,6 @@ const Joi = require('joi')
 require('mongoose-type-url');
 
 
-const options = { discriminatorKey: 'activityType' };
 let activitySchema = new mongoose.Schema({
     description: {
         type: String,
