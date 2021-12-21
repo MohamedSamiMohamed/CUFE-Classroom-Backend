@@ -24,6 +24,24 @@ exports.addCourse = async (req, res) => {
     catch (err) {
         throw new Error(err.message)
     }
-    // await course.save()
-    // return res.status(200).send("The course has been created successfully")
+}
+
+exports.addWeek = async (req,res)=>{
+    let course = await Course.findById(req.params.id)
+    if(!course) return res.status(404).send("No course is found with this ID")
+    console.log(req.user)
+    if(req.user.role === "instructor" && (req.user._id!=course.instructor)) return res.status(403).send("you must be the einstructor of the course to be able to add weeks")
+    let week = new CourseWeek()
+    let weeksNum = course.weeks.length
+    course.weeks.push({
+        weekNum : weeksNum+1,
+        id : week._id
+    })
+    try {
+        await Fawn.Task().save('courseweeks',week).update('courses', {_id : course._id},{$set :{weeks : course.weeks}}).run()
+        return res.status(201).send(`week ${weeksNum+1} has been added to this course, you can start pushing materials to it!`)
+    }
+    catch (err) {
+        throw new Error(err.message)
+    }
 }
