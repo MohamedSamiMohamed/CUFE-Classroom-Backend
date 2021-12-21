@@ -10,6 +10,7 @@ const Joi = require('joi');
 const {validateCourse} = require('../models/course')
 
 router.post('/',[auth,validateRoles(["admin","instructor"]),validate(validateCourse)],courseController.addCourse)
-// router.post('/week/:id',[auth,validateRoles(["admin","instructor"])],courseController.addWeek)
-
+router.post('/week/:id',[auth,validateRoles(["admin","instructor"])],courseController.addWeek)
+router.get('/:id',[auth],courseController.getCourse)
+router.get('/',[auth],courseController.getAllCourses)
 module.exports = router
