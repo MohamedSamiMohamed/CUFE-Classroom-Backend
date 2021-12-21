@@ -5,6 +5,7 @@ const _ = require('lodash');
 const { QA } = require('../models/qa')
 const Fawn = require("fawn");
 const { response } = require('express');
+const { User } = require('../models/user');
 require("dotenv")
 // Fawn.init(process.env.FAWN_MONGODB_CONNECTION_STRING, "TempForFawn")
 
@@ -12,14 +13,17 @@ require("dotenv")
 exports.addCourse = async (req, res) => {
     let course = await Course.findOne({ code: req.body.code })
     if (course) return res.status(400).send("There is existing course with this code, please check the course code and make it unique")
+    let instructor = await User.findById(req.user._id)
+    if(!instructor) return res.status(500).send("something went very wrong")
     course = new Course(_.pick(req.body, ['code', 'name', 'about']))
+    instructor.courses.push(course._id)
     course.instructor = req.user._id
     let qaSection = new QA({
         course: course._id
     })
     course.qa = qaSection._id
     try {
-        await Fawn.Task().save('courses', course).save('qas', qaSection).run()
+        await Fawn.Task().save('courses', course).save('qas', qaSection).update('users',{_id:instructor._id},{courses: instructor.courses}).run()
         return res.status(201).send("The course has been created successfully")
     }
     catch (err) {
