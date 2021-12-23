@@ -11,7 +11,7 @@ let weekSchema = new mongoose.Schema({
     },
     id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'courseWeek',
+        ref: 'courseweek',
         required: true
     }
 }, { _id: false })

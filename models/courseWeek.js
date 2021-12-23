@@ -18,6 +18,6 @@ let courseWeekSchema = new mongoose.Schema({
     }
 })
 
-let CourseWeek = mongoose.model("courseWeek",courseWeekSchema)
+let CourseWeek = mongoose.model("courseweek",courseWeekSchema)
 
 exports.CourseWeek = CourseWeek
