@@ -35,7 +35,7 @@ exports.addWeek = async (req, res) => {
     let course = await Course.findById(req.params.id)
     if (!course) return res.status(404).send("No course is found with this ID")
     console.log(req.user)
-    if (req.user.role === "instructor" && (req.user._id != course.instructor)) return res.status(403).send("you must be the einstructor of the course to be able to add weeks")
+    if (req.user.role === "instructor" && (req.user._id != course.instructor)) return res.status(403).send("you must be the instructor of the course to be able to add weeks")
     let week = new CourseWeek()
     let weeksNum = course.weeks.length
     course.weeks.push({
@@ -44,7 +44,9 @@ exports.addWeek = async (req, res) => {
     })
     try {
         await Fawn.Task().save('courseweeks', week).update('courses', { _id: course._id }, { $set: { weeks: course.weeks } }).run()
-        return res.status(201).send(`week ${weeksNum + 1} has been added to this course, you can start pushing materials to it!`)
+        return res.status(201).send({message:`week ${weeksNum + 1} has been added to this course, you can start pushing materials to it!`,
+        id: week._id
+    })
     }
     catch (err) {
         throw new Error(err.message)
@@ -60,6 +62,6 @@ exports.getCourse = async (req, res) => {
 }
 
 exports.getAllCourses = async (req, res) => {
-    let courses = await Course.find().select({ code: 1, name: 1, about: 1, instructor: 1, _id: 0 }).populate("instructor", "-_id -userType firstName lastName userName")
+    let courses = await Course.find().select({ code: 1, name: 1, about: 1, instructor: 1 }).populate("instructor", "-_id -userType firstName lastName userName")
     return res.status(200).send(courses)
 }
