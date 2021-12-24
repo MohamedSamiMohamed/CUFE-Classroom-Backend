@@ -12,5 +12,5 @@ module.exports = () => {
       useUnifiedTopology: true,
     })
     .then(() => dbDebugger('Connected to MongoDB...'))
-    .catch(err => dbDebugger('Could not connect to MongoDB...'+err.message));
-    }
+    .catch(err => dbDebugger('Could not connect to MongoDB...' + err.message));
+}
