@@ -11,6 +11,7 @@ let activitySchema = new mongoose.Schema({
     description: {
         type: String,
         required: true,
+        default : "material"
     },
     url: {
         type: mongoose.SchemaTypes.Url,
@@ -27,6 +28,22 @@ let activitySchema = new mongoose.Schema({
 })
 
 
+function validateYoutubeActivity(activity) {
+    const schema = Joi.object({
+        description: Joi.string().required(),
+        url: Joi.string().regex(/^(ftp|http|https):\/\/[^ "]+$/).required()
+    });
+    return schema.validate(activity)
+}
+
+function validatePdfActivity(activity) {
+    const schema = Joi.object({
+        description: Joi.string().required(),
+        url: Joi.string().min(4).max(20).required()
+    });
+    return schema.validate(activity)
+}
 const Activity = mongoose.model('activity', activitySchema);
 exports.Activity = Activity
-
+exports.validateYoutubeActivity = validateYoutubeActivity
+exports.validatePdfActivity = validatePdfActivity
