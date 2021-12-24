@@ -1,5 +1,6 @@
 const { User, Instructor } = require("../models/user")
 const _ = require('lodash');
+const { setEmailOptions, sendConfirmationEmail } = require("../utils/email");
 
 exports.getMe = async (req, res) => {
     if (req.user.role === "instructor") {
@@ -32,5 +33,17 @@ exports.getUser = async (req, res) => {
 }
 
 exports.updateInfo = async(req,res)=>{
-
+    let user = await User.findById(req.user._id)
+    if(!user) return res.status(404).send("sorry, something very wrong has been occured")
+    for (key in req.body){
+        user[key] = req.body[key]
+        if(key == 'email') {
+            user.isVerified = false
+            user.confirmationToken = user.generateConfirmationToken()
+            setEmailOptions(user)
+            await sendConfirmationEmail(user.email)       
+        }
+    }
+    await user.save()
+    return res.status(200).send({status:"success",message:_.pick(user,['_id', 'email', 'firstName', 'lastName', 'userName','birthDate','isVerified'])})
 }
