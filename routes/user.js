@@ -9,8 +9,17 @@ const Joi = require('joi');
 
 router.get('/me', [auth], userController.getMe)
 router.get('/:id', [auth], userController.getUser)
-router.put('/me', [auth,validate(validateUpdateInfo)], userController.updateInfo)
+router.put('/me', [auth, validate(validateUpdateInfo)], userController.updateInfo)
+router.get('/', [auth, validate(validateEmailUserName)],userController.getUserByEmail)
 
+function validateEmailUserName(body) {
+    const schema = Joi.object({
+        email: Joi.alternatives().try(Joi.string()
+            .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }), Joi.string().min(5).max(20)).required()
+
+    })
+    return schema.validate(body)
+}
 function validateUpdateInfo(body) {
     const schema = Joi.object({
         userName: Joi.string().min(5).max(40),
