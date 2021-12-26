@@ -69,12 +69,9 @@ let userSchema = new mongoose.Schema({
         },
         default : function (){
             if(this.type == 'admin'){
-                console.log("admin")
                 return []
             }
             else{
-                console.log(this.type)
-
                 return undefined;
             }
 
