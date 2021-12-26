@@ -65,3 +65,10 @@ exports.getAllCourses = async (req, res) => {
     let courses = await Course.find().select({ code: 1, name: 1, about: 1, instructor: 1 }).populate("instructor", "-_id -userType firstName lastName userName")
     return res.status(200).send(courses)
 }
+
+exports.checkCourseOwner = async(req,res)=>{
+    let course = await Course.findById(req.params.id)
+    if(!course) return res.status(404).send("sorry, we can't find any course with this id")
+    if(req.user._id == course.instructor) return res.status(200).send({message : true})
+    else return res.status(400).send({message : false})
+}
