@@ -55,7 +55,11 @@ let courseSchema = new mongoose.Schema({
 })
 
 
-
+// courseSchema.pre('remove',{query:false,document:true},function (){
+// console.log(this.qa)
+// console.log("heeeereeee")
+// next()
+// })
 
 
 
