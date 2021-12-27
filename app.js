@@ -9,7 +9,6 @@ let cors = require('cors');
 if (process.env.NODE_ENV === "development") {
     app.use(morgan('dev'))
 }
-
 require('./start-up/db')()
 require('./start-up/routes')(app)
 app.use(express.urlencoded({ extended: true }));
