@@ -1,9 +1,10 @@
 var multer = require('multer')
 var aws = require('aws-sdk')
 var multerS3 = require('multer-s3')
-require('dotenv')
+require('dotenv').config({
+    path: `./.env.${process.env.NODE_ENV}`
+})
 let path = require('path')
-
 var s3 = new aws.S3(
     {
         accessKeyId: process.env.AWS_ACESS_KEY_ID,
