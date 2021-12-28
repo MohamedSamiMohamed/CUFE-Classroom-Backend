@@ -60,22 +60,46 @@ let userSchema = new mongoose.Schema({
     birthDate: {
         type: Date,
         required: true
-    }
+    },
+    courses: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'course',
+        required: function () {
+            return this.type == "admin"
+        },
+        default : function (){
+            if(this.type == 'admin'){
+                return []
+            }
+            else{
+                return undefined;
+            }
+
+        },
+
+    },
 
 }, options)
+
+// userSchema.pre('save',(next)=>{
+//     if (this.type === 'admin') {
+//         this.courses = [];
+//       }
+//       next();
+// })
 
 
 let instructorSchema = new mongoose.Schema({
     courses: {
-        type : [mongoose.Schema.Types.ObjectId],
-        ref : 'course',
-        required : true,
-        default : []
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'course',
+        required: true,
+        default: []
     }
 }, options)
 
 userSchema.methods.generateAuthToken = function () {
-    return jwt.sign({ _id: this._id, role: this.type, email: this.email,userName : this.userName }, process.env.JWT_PRIVATE_KEY);
+    return jwt.sign({ _id: this._id, role: this.type, email: this.email, userName: this.userName }, process.env.JWT_PRIVATE_KEY);
 }
 
 userSchema.methods.generateConfirmationToken = function () {

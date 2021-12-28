@@ -13,4 +13,5 @@ router.post('/',[auth,validateRoles(["admin","instructor"]),validate(validateCou
 router.post('/week/:id',[auth,validateRoles(["admin","instructor"])],courseController.addWeek)
 router.get('/:id',[auth],courseController.getCourse)
 router.get('/',[auth],courseController.getAllCourses)
+router.get('/isOwner/:id',[auth,validateRoles(["admin","instructor"])],courseController.checkCourseOwner)
 module.exports = router

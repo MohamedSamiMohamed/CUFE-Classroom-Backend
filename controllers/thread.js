@@ -4,7 +4,8 @@ const Fawn = require("fawn");
 const { Thread } = require("../models/thread")
 const { Comment } = require("../models/comment")
 const { QA } = require('../models/qa')
-const Pusher = require('pusher')
+const Pusher = require('pusher');
+const { User } = require('../models/user');
 require("dotenv")
 
 const pusher = new Pusher({
@@ -36,7 +37,9 @@ exports.startThread = async (req, res) => {
     let qa = await QA.findOne({ _id: req.params.id })
     if (!qa) return res.status(404).send("sorry, No QA section has been found with this ID")
     let thread = new Thread()
+    let user = await User.findOne({userName : req.user.userName})
     thread.question = req.body
+    thread.question.name = `${user.firstName} ${user.lastName}`
     thread.question.userName = req.user.userName
     thread.qa = req.params.id
     const result = await thread.save()
@@ -48,7 +51,9 @@ exports.postComment = async (req, res) => {
 
     let thread = await Thread.findById(req.params.id)
     if (!thread) return res.status(404).send("Sorry, No Thread found with the given ID")
-    let comment = new Comment(_.pick(req.body, ['name', 'text']))
+    let user = await User.findOne({userName : req.user.userName})
+    let comment = new Comment(_.pick(req.body, ['text']))
+    comment.name = `${user.firstName} ${user.lastName}`
     comment.thread = thread._id
     comment.userName = req.user.userName
     const reuslt = await comment.save()
