@@ -1,10 +1,12 @@
 const faker = require('faker');
 const { ObjectId } = require('mongoose').Types;
-exports.seedUsers = () => {
+const passwordHashing = require("../../utils/passwordHashing");
+exports.seedUsers = async() => {
     const learners = [];
     const instructors = [];
     let courseID
     const coursesIDs = [];
+    let hashedPass = await passwordHashing("testPassword1")
 for (let i = 0; i < 10; i += 1) {
   let instructorcoursesIDs = []
   courseID = new ObjectId()
@@ -15,7 +17,7 @@ for (let i = 0; i < 10; i += 1) {
     firstName : faker.name.firstName(),
     lastName : faker.name.lastName(),
     email : faker.internet.email(),
-    password : "testPassword1",
+    password : hashedPass,
     isVerified : true,
     type : "learner",
     birthDate : "1999-08-02",
@@ -29,7 +31,7 @@ for (let i = 0; i < 10; i += 1) {
     firstName : faker.name.firstName(),
     lastName : faker.name.lastName(),
     email : faker.internet.email(),
-    password : "testPassword1",
+    password : hashedPass,
     isVerified : true,
     type : "instructor",
     birthDate : "1999-08-02",
@@ -51,7 +53,7 @@ for (let i = 0; i < 10; i += 1) {
     firstName : faker.name.firstName(),
     lastName : faker.name.lastName(),
     email : faker.internet.email(),
-    password : "testPassword1",
+    password : hashedPass,
     isVerified : true,
     type : "admin",
     birthDate : "1999-08-02",

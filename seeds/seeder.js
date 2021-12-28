@@ -25,7 +25,7 @@ async function seedDB(){
     await dropDB()
     require('../start-up/db').connectDB()
     console.log('Running seeds, please wait...');
-    const {learners,instructors,admin,coursesIDs} = userSeed.seedUsers()
+    const {learners,instructors,admin,coursesIDs} = await userSeed.seedUsers()
     const learnersDocs = await User.create(learners)
     const instructorsDocs = await Instructor.create(instructors)
     const adminDoc  = await User.create(admin)
@@ -43,6 +43,7 @@ async function seedDB(){
     const { pdfActivities, youtubeActivities } = activitySeed.seedActivity(youtubeIDs,pdfIDs)
     await Activity.create(pdfActivities)
     await Activity.create(youtubeActivities)
+    
     console.log('✅ Seeds executed successfully');
     process.exit(1)
 }
