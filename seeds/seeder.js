@@ -5,6 +5,7 @@ let dropDB = require('../utils/dropDB')
 const userSeed = require('./data/user');
 const courseSeed = require('./data/course')
 const qaSeed = require('./data/qa')
+const syllabusSeed = require('./data/syllabus')
 require('dotenv').config({
     path: `./.env.${process.env.NODE_ENV}`
 })
@@ -12,6 +13,7 @@ require('dotenv').config({
 const { ObjectId } = require('mongoose').Types;
 const { Course } = require("../models/course");
 const { QA } = require("../models/qa");
+const { Syllabus } = require("../models/syllabus");
 
 
 async function seedDB(){
@@ -30,6 +32,8 @@ async function seedDB(){
     await Course.create(courses)
     const qas = qaSeed.seedQA(coursesIDs,qaIDs)
     await QA.create(qas)
+    const syllabuses = syllabusSeed.seedSyllabus(syllabusesIDs)
+    await Syllabus.create(syllabuses)
     // await User.insertMany(learnersDocs)    
     // await Instructor.insertMany(instructorsDocs)
     // await adminDoc.save()
