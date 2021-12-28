@@ -34,9 +34,7 @@ async function seedDB(){
     await QA.create(qas)
     const syllabuses = syllabusSeed.seedSyllabus(syllabusesIDs)
     await Syllabus.create(syllabuses)
-    // await User.insertMany(learnersDocs)    
-    // await Instructor.insertMany(instructorsDocs)
-    // await adminDoc.save()
+
     console.log('✅ Seeds executed successfully');
     process.exit(1)
 }
