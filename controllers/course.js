@@ -14,7 +14,7 @@ exports.addCourse = async (req, res) => {
     let course = await Course.findOne({ code: req.body.code })
     if (course) return res.status(400).send("There is existing course with this code, please check the course code and make it unique")
     let instructor = await User.findById(req.user._id)
-    if(!instructor) return res.status(500).send("something went very wrong")
+    if (!instructor) return res.status(500).send("something went very wrong")
     course = new Course(_.pick(req.body, ['code', 'name', 'about']))
     instructor.courses.push(course._id)
     course.instructor = req.user._id
@@ -23,8 +23,11 @@ exports.addCourse = async (req, res) => {
     })
     course.qa = qaSection._id
     try {
-        await Fawn.Task().save('courses', course).save('qas', qaSection).update('users',{_id:instructor._id},{courses: instructor.courses}).run()
-        return res.status(201).send("The course has been created successfully")
+        await Fawn.Task().save('courses', course).save('qas', qaSection).update('users', { _id: instructor._id }, { courses: instructor.courses }).run()
+        return res.status(201).send({
+            message: "The course has been created successfully",
+            course : course
+        })
     }
     catch (err) {
         throw new Error(err.message)
@@ -44,9 +47,10 @@ exports.addWeek = async (req, res) => {
     })
     try {
         await Fawn.Task().save('courseweeks', week).update('courses', { _id: course._id }, { $set: { weeks: course.weeks } }).run()
-        return res.status(201).send({message:`week ${weeksNum + 1} has been added to this course, you can start pushing materials to it!`,
-        id: week._id
-    })
+        return res.status(201).send({
+            message: `week ${weeksNum + 1} has been added to this course, you can start pushing materials to it!`,
+            id: week._id
+        })
     }
     catch (err) {
         throw new Error(err.message)
@@ -66,9 +70,9 @@ exports.getAllCourses = async (req, res) => {
     return res.status(200).send(courses)
 }
 
-exports.checkCourseOwner = async(req,res)=>{
+exports.checkCourseOwner = async (req, res) => {
     let course = await Course.findById(req.params.id)
-    if(!course) return res.status(404).send("sorry, we can't find any course with this id")
-    if(req.user._id == course.instructor) return res.status(200).send({message : true})
-    else return res.status(400).send({message : false})
+    if (!course) return res.status(404).send("sorry, we can't find any course with this id")
+    if (req.user._id == course.instructor) return res.status(200).send({ message: true })
+    else return res.status(400).send({ message: false })
 }
