@@ -59,7 +59,7 @@ exports.addWeek = async (req, res) => {
 exports.getCourse = async (req, res) => {
     let course = await Course.findById(req.params.id)
     if (!course) return res.status(404).send("No course is found with this ID")
-    course = await course.populate("instructor", '-isVerified -confirmationToken -__v -password')
+    course = await course.populate("instructor syllabus", '-isVerified -confirmationToken -__v -password')
     course.weeksNum = course.weeks.length
     return res.status(200).send(course)
 }
