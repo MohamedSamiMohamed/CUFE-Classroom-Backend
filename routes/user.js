@@ -7,6 +7,8 @@ const auth = require('../middlewares/authentication')
 const Joi = require('joi');
 
 
+router.get('/instructors',[auth],userController.getAllInstructors)
+router.get('/learners',[auth],userController.getAllLearners)
 router.get('/me', [auth], userController.getMe)
 router.get('/:id', [auth], userController.getUser)
 router.put('/me', [auth, validate(validateUpdateInfo)], userController.updateInfo)

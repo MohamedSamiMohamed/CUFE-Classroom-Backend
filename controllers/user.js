@@ -109,3 +109,17 @@ exports.getUserByEmail = async (req, res) => {
         return res.status(200).send(_.pick(user, ['_id', 'userName', 'email', 'firstName', 'lasName', 'type', 'birthDate']))
     }
 }
+
+exports.getAllLearners = async (req, res) => {
+    let pageNumber = parseInt(req.query.pageNumber)
+    let pageSize = parseInt(req.query.pageSize)
+    let users = await User.find({ type: "learner" }).select("-password -isVerified -confirmationToken -type").skip((pageNumber - 1) * pageSize).limit(pageSize)
+    return res.status(200).send(users)
+}
+
+exports.getAllInstructors = async (req, res) => {
+    let pageNumber = parseInt(req.query.pageNumber)
+    let pageSize = parseInt(req.query.pageSize)
+    let users = await User.find({ type: "instructor" }).select("-password -isVerified -confirmationToken -type -userType").populate('courses', '-instructor -qa -syllabus -weeks').skip((pageNumber - 1) * pageSize).limit(pageSize)
+    return res.status(200).send(users)
+}
