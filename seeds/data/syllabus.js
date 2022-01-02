@@ -8,19 +8,19 @@ exports.seedSyllabus = (syllabusesIDs) => {
             syllabus: [
                 {
                     week: 1,
-                    date: `2021-10-10`,
+                    date: `2022-10-10`,
                     lectureTopic: faker.name.jobDescriptor(),
                     readings: faker.name.title()
                 },
                 {
                     week: 2,
-                    date: `2021-11-10`,
+                    date: `2022-11-10`,
                     lectureTopic: faker.name.jobDescriptor(),
                     readings: faker.name.title()
                 },
                 {
                     week: 3,
-                    date: `2021-12-10`,
+                    date: `2022-12-10`,
                     lectureTopic: faker.name.jobDescriptor(),
                     readings: faker.name.title()
                 },
