@@ -58,7 +58,7 @@ async function seedDB(){
     const comments = commentSeed.seedComment(threadIDs, learnersDocs, instructorsDocs)
     await Comment.create(comments)
     console.log('✅ Seeds executed successfully');
-    process.exit(1)
+    process.exit(0)
 }
 
 seedDB()
