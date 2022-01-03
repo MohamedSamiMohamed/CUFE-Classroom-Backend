@@ -8,7 +8,7 @@ const { JoiPasswordComplexity } = require('joi-password')
 
 router.post('/signup', validate(validateUser), authController.signup)
 router.post('/login', validate(validateLogin), authController.login)
-router.patch('/confirm', authController.verifyEmail)
+router.get('/confirm', authController.verifyEmail)
 
 function validateLogin(loginReqBody) {
     const schema = Joi.object({
