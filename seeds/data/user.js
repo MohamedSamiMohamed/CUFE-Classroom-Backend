@@ -52,7 +52,7 @@ exports.seedUsers = async () => {
     userName: `admin`,
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
-    email: faker.internet.email(),
+    email: `admin@gmail.com`,
     password: hashedPass,
     isVerified: true,
     type: "admin",

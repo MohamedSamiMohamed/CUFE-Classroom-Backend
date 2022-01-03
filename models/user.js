@@ -138,7 +138,7 @@ function validateUser(user) {
             .required()
             .equal(Joi.ref('password'))
             .messages({ 'any.only': 'confirmed password does not match password' }),
-        type: Joi.string().valid("admin", "learner", "instructor").required(),
+        type: Joi.string().valid("learner", "instructor").required(),
         birthDate: Joi.date().max('01-01-2004').iso().messages({ 'date.format': `Date format is YYYY-MM-DD`, 'date.max': `Age must be +17` }).required(),
         userName: Joi.string().min(5).max(40).required(),
     });
