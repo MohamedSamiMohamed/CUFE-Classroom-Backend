@@ -57,7 +57,7 @@ exports.login = async (req, res) => {
     else {
         const token = user.generateAuthToken()
         user.token = token
-        return res.status(200).header('x-auth-token', token).send(_.pick(user, ['_id', 'email', 'firstName', 'lastName', 'userName', 'token']))
+        return res.status(200).header('x-auth-token', token).send(_.pick(user, ['_id', 'email', 'firstName', 'type','lastName', 'userName', 'token']))
     }
 
 }

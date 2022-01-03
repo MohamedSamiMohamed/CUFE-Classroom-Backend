@@ -64,10 +64,15 @@ exports.updateInfo = async (req, res) => {
         success = true
     }
     if ((conflictEmail || conflictUserName) && success) {
+        let error = ""
+        if(conflictEmail) {
+            error = "email"
+        }
+        else if(conflictUserName){ error = "username"}
         await user.save()
         return res.status(207).send({
             status: "partially successful",
-            message: "Your information has been updated successfull except your userName/email as they are already registered before",
+            message: `Your information has been updated successfull except your ${error} as they are already registered before`,
             user: _.pick(user, ['_id', 'email', 'firstName', 'lastName', 'userName', 'birthDate', 'isVerified'])
         })
     }
