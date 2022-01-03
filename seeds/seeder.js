@@ -1,6 +1,5 @@
-require('dotenv').config({
-    path: `./.env.${process.env.NODE_ENV}`
-})
+require ('../utils/loadEnv')()
+
 
 const faker = require("faker");
 const mongoose = require('mongoose');

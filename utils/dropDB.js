@@ -1,5 +1,4 @@
 const MongoClient = require('mongodb').MongoClient;
-const mongoose = require('mongoose');
 require('dotenv').config()
 dbDebugger = require('debug')('db')
 module.exports = async () => {

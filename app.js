@@ -1,7 +1,4 @@
-require('dotenv').config({
-    path: `./.env.${process.env.NODE_ENV}`
-})
-
+require ('./utils/loadEnv')()
 require('express-async-errors')
 const morgan = require('morgan')
 var multer = require('multer');
