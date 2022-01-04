@@ -14,6 +14,15 @@ var s3 = new aws.S3(
 
 
 var upload = multer({
+    fileFilter : function fileFilter(req,file,cb){
+
+        if(file.mimetype != "application/pdf"){
+            cb(null, false)
+        }
+        else {
+            cb(null, true)
+        }
+    },
     storage: multerS3({
         s3: s3,
         bucket: process.env.AWS_BUCKET_NAME,
