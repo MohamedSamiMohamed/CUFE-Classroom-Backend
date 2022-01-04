@@ -7,7 +7,7 @@ exports.seedActivity = (youtubeIDs, pdfIDs) => {
     for (i = 0; i < youtubeIDs.length; i += 1) {
         let youtubeActivity = new Activity({
             description: `youtube activity #${i}`,
-            url: "https://www.youtube.com/watch?v=NI2Y18esOkg",
+            url: "https://www.youtube.com/embed/tgbNymZ7vqY",
             type: "youtube"
         })
 

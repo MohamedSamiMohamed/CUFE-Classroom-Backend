@@ -31,7 +31,7 @@ let activitySchema = new mongoose.Schema({
 function validateYoutubeActivity(activity) {
     const schema = Joi.object({
         description: Joi.string().required(),
-        url: Joi.string().regex(/^(ftp|http|https):\/\/[^ "]+$/).required()
+        url: Joi.string().regex(/^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/))((\w|-){11})(?:\S+)?$/).message({ 'any': 'the link must be a yotube embed lkink' }).required()
     });
     return schema.validate(activity)
 }
