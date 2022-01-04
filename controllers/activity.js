@@ -29,7 +29,7 @@ exports.validateMaterialUploading = async(req,res,next) =>{
   if(!course) return res.status(404).send("sorry, Can't find this course")
   let courseWeek = await CourseWeek.findById(weekID)
   if (!courseWeek) return res.status(404).send("This week doesn't exist!")
-  if (course.instructor != req.user._id) {
+  if (course.instructor != req.user._id && req.user.role != "admin") {
     return res.status(403).send("you must be the instructor of the course to add activities to it")
   }
   req.courseWeek = courseWeek._id
