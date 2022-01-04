@@ -24,11 +24,11 @@ exports.seedCourses = (coursesIDs, instructorsIDs) => {
             syllabus: syllabusID,
             weeks: [
                 {
-                    weekNum: i % 2,
+                    weekNum: 1,
                     id: weekIDs[i * 2],
                 },
                 {
-                    weekNum: (i + 1) % 2,
+                    weekNum: 2,
                     id: weekIDs[(i * 2)+1],
 
                 }]

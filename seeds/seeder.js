@@ -29,6 +29,7 @@ const { Comment } = require("../models/comment");
 
 
 async function seedDB(){
+    try {
     databaseConnection.connectDB()
     await dropDB()
     databaseConnection.connectDB()
@@ -58,6 +59,11 @@ async function seedDB(){
     await Comment.create(comments)
     console.log('✅ Seeds executed successfully');
     process.exit(0)
+    }
+    catch (err) {
+        console.log("The seeder has failed, please run it again.\n it may contains some invalid data with respect to out database schema due to randomness, ie first name that is shorter than 3 characters")
+        process.exit(1)
+    }
 }
 
 seedDB()
