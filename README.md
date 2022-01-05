@@ -45,7 +45,7 @@ npm run seed
 ### How to run?
 - Clone the repository
 ```
-git clone  <https://github.com/CUFE-Classroom/CUFE-Classroom-Backend.git>
+git clone https://github.com/MohamedSamiMohamed/CUFE-Classroom-Backend
 ```
 - Install dependencies
 ```
