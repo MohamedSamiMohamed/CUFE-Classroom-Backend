@@ -1,5 +1,9 @@
 # CUFE-Classroom-Backend
-This is the full REST API for CUFE-Classroom application.
+This is the full REST API for CUFE-Classroom application. This project aims to build a web service that facilitates the communication between teachers and students.</br>
+In CUFE-Classroom a teacher can share his own course syllabus, pdfs, tutorials and lectures.</br>
+Students can enroll in a course to be able to see the stream of this course week by week.</br>
+Students and teachers can discuss any topic in the course QA section.
+This project is built with Node.js, Expressjs, MongoDB, Amazon S3 service, Pusher and other npm helper packages</br> 
 # Pre-requisites
 Install [Node.js](https://nodejs.org/en/) v16.13.1</br>
 Install [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) v8.1.2
