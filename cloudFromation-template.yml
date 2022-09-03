@@ -1,0 +1,33 @@
+---
+Description: |
+      This is IAC project to deploy web servers for a highly available web app using CloudFormation.
+      it will begin with creating servers, security roles and software.
+      Author: Mohamed Samy
+Resources:
+
+  WebServerSecGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: Allow http to our hosts and SSH from local only
+        SecurityGroupIngress: 
+          - IpProtocol: tcp
+            FromPort: 80
+            ToPort: 80
+            CidrIp: 0.0.0.0/0
+          - IpProtocol: tcp
+            FromPort: 22
+            ToPort: 22
+            CidrIp: 0.0.0.0/0
+        SecurityGroupEgress:
+          - IpProtocol: tcp
+            FromPort: 0
+            ToPort: 65535
+            CidrIp: 0.0.0.0/0
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      SecurityGroups:
+        - !Ref WebServerSecGroup
+      ImageId: ami-05fa00d4c63e32376
+      InstanceType: t2.micro
+      KeyName: ci-cd-key
