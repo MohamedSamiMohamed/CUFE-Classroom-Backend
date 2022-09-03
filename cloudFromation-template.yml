@@ -29,6 +29,6 @@ Resources:
     Properties:
       SecurityGroupIds:
         - !Ref WebServerSecGroup
-      ImageId: ami-05fa00d4c63e32376
+      ImageId: ami-052efd3df9dad4825
       InstanceType: t2.micro
       KeyName: ci-cd-key
