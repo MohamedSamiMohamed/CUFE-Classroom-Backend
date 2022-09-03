@@ -9,6 +9,7 @@ Resources:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: Allow http to our hosts and SSH from local only
+        VpcId: vpc-02c235375bbef7bd4
         SecurityGroupIngress: 
           - IpProtocol: tcp
             FromPort: 80
