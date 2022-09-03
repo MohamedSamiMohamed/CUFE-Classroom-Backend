@@ -30,7 +30,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-              ansible-playbook -i  ./../inventory main.yml
+              ansible-playbook -i  inventory main.yml
 
   say-hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
