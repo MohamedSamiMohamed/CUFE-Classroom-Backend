@@ -1,0 +1,39 @@
+---
+- name: "update apt packages"
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: "upgrade packages"
+  become: yes
+  apt:
+    upgrade: yes
+
+- name: "install nodejs and npm"
+  become: yes
+  apt: 
+    name: ["nodejs","npm"]
+    state: latest
+    update_cache: yes
+
+
+- name: "install pm2"
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+
+- name: "create web directory"
+  become: yes
+  shell: mkdir ~/web
+
+- name: "copy web file to web directory"
+  become: yes
+  copy:
+    src: index.js
+    dest: ~/web/index.js
+    backup: yes
+
+- name: Executing node
+  shell: |
+    pm2 start ~/web/index.js -f 
