@@ -30,7 +30,7 @@ jobs:
       - run:
           name: Run Playbook and Configure server
           command: |
-              ansible-playbook -i  inventory main.yml -e ansible_python_interpreter=/usr/bin/python --check
+              ansible-playbook -i  inventory main.yml
 
   say-hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -51,5 +51,5 @@ workflows:
   say-hello-workflow:
     jobs:
       # - say-hello
-      - create_infrastructure
-      # - configure_infrastructure
+      # - create_infrastructure
+      - configure_infrastructure
