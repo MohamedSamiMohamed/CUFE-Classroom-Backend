@@ -19,14 +19,19 @@ jobs:
                   --region us-east-1
   configure_infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: python:3.10-alpine3.14
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints: ["d6:c1:bc:4f:55:51:cf:68:d1:c0:1c:51:a6:df:70:aa"]
       - run: 
           name: Install Ansible
-          command: apk add --update ansible
+          command: |
+            apk add -no-cache aws-cli
+            pip install --upgrade pip
+            python3 -m pip install ansible
+            ansible --version
+            apk add openssh-client
       - run:
           name: Run Playbook and Configure server
           command: |
@@ -52,5 +57,5 @@ workflows:
   say-hello-workflow:
     jobs:
       # - say-hello
-      - create_infrastructure
-      # - configure_infrastructure
+      # - create_infrastructure
+      - configure_infrastructure
