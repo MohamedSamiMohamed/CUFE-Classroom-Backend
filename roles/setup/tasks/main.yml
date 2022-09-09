@@ -25,15 +25,15 @@
 
 - name: "create web directory"
   become: yes
-  shell: mkdir ~/web
+  shell: mkdir ~/my_web
 
 - name: "copy web file to web directory"
   become: yes
   copy:
     src: index.js
-    dest: ~/web/index.js
+    dest: ~/my_web/index.js
     backup: yes
 
 - name: Executing node
   shell: |
-    pm2 start ~/web/index.js -f 
+    pm2 start ~/my_web/index.js -f 
