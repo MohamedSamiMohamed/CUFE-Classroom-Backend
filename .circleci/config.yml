@@ -27,7 +27,7 @@ jobs:
       - run: 
           name: Install Ansible
           command: |
-            apk add -no-cache aws-cli
+            apk add --no-cache aws-cli
             pip install --upgrade pip
             python3 -m pip install ansible
             ansible --version
